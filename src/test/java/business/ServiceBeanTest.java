@@ -115,7 +115,7 @@ public class ServiceBeanTest {
         verify(da).save(sample);
     }
 
-    @Test
+     @Test
     public void testWhenCreateNewAndProjectNameInUseExceptionThrown() {
         // setup
         Projects sample = getTestProject();
@@ -128,7 +128,7 @@ public class ServiceBeanTest {
         // act
         try {
             sb.createNewProject(sample);
-        } catch (Exception e) {
+        } catch (IllegalArgumentException e) {
             // Expected result
             // assert
             verify(da).findByProjectName(anyString());
@@ -142,6 +142,26 @@ public class ServiceBeanTest {
     }
     
     @Test
+    public void testWhenCreateNewAndNullEntityExceptionThrown() {
+        // setup
+        
+        // act
+        try {
+            sb.createNewProject(null);
+        } catch (IllegalArgumentException e) {
+            // Expected result
+            // assert
+            verify(da, never()).findByProjectName(anyString());
+            verify(da, never()).findByDeveloperId(anyString());
+            verify(da, never()).save((Projects) anyObject());
+            return;
+        }
+
+        // Shouldn't reach this point
+        fail();
+    }
+
+    @Test
     public void testWhenCreateNewAndDeveloperIdInUseExceptionThrown() {
         // setup
         Projects sample = getTestProject();
@@ -151,11 +171,11 @@ public class ServiceBeanTest {
 
         when(da.findByProjectName(anyString())).thenReturn(new ArrayList<Projects>());
         when(da.findByDeveloperId(anyString())).thenReturn(list);
-        
+
         // act
         try {
             sb.createNewProject(sample);
-        } catch (Exception e) {
+        } catch (IllegalArgumentException e) {
             // Expected result
             // assert
             verify(da).findByProjectName(anyString());
@@ -172,7 +192,7 @@ public class ServiceBeanTest {
     public void testWhenCreateNewAndProjectNameEmptyExceptionThrown() {
         // setup
         Projects test = new Projects(0, null, "test", "test");
-        
+
         // act
         try {
             sb.createNewProject(test);
@@ -183,16 +203,16 @@ public class ServiceBeanTest {
             verify(da, never()).save((Projects) anyObject());
             return;
         }
-        
+
         // Shouldn't get here
         fail();
     }
-    
+
     @Test
     public void testWhenCreateNewAndDevIdEmptyExceptionThrown() {
         // setup
         Projects test = new Projects(0, "test", null, "test");
-        
+
         // act
         try {
             sb.createNewProject(test);
@@ -203,16 +223,16 @@ public class ServiceBeanTest {
             verify(da, never()).save((Projects) anyObject());
             return;
         }
-        
+
         // Shouldn't get here
         fail();
     }
-    
+
     @Test
     public void testWhenCreateNewAndDescriptionEmptyExceptionThrown() {
         // setup
         Projects test = new Projects(0, "test", "test", null);
-        
+
         // act
         try {
             sb.createNewProject(test);
@@ -223,13 +243,215 @@ public class ServiceBeanTest {
             verify(da, never()).save((Projects) anyObject());
             return;
         }
-        
+
         // Shouldn't get here
         fail();
     }
+
+    @Test
+    public void testWhenUpdateAndValidDBCalledtoSave() {
+        // setup
+        Projects test = getTestProject();
+        List<Projects> list = new ArrayList<Projects>();
+        list.add(test);
+
+        when(da.findByProjectId(test.getId())).thenReturn(list);
+        when(da.findByProjectName(test.getProjectName())).thenReturn(list);
+        when(da.findByDeveloperId(test.getDeveloperId())).thenReturn(list);
+
+        // act
+        sb.updateProject(test);
+
+        // assert
+        verify(da).findByProjectId(test.getId());
+        verify(da).findByProjectName(test.getProjectName());
+        verify(da).findByDeveloperId(test.getDeveloperId());
+        verify(da).update(test);
+    }
+
+    @Test
+    public void testWhenUpdateAndNotFoundExceptionThrown() {
+        // setup
+        Projects test = getTestProject();
+        when(da.findByProjectId(test.getId())).thenReturn(new ArrayList<Projects>());
+
+        // act
+        try {
+            sb.updateProject(test);
+        } catch (IllegalArgumentException e) {
+            // assert
+            // Expected
+            verify(da).findByProjectId(test.getId());
+            verify(da, never()).findByProjectName(test.getProjectName());
+            verify(da, never()).findByDeveloperId(test.getDeveloperId());
+            verify(da, never()).update(test);
+            return;
+        }
+        fail();
+
+    }
+
+    @Test
+    public void testWhenUpdateAndNoProjectNameExceptionThrown() {
+        // setup
+        Projects test = getTestProject();
+        test.setProjectName(null);
+
+        // act
+        try {
+            sb.updateProject(test);
+        } catch (IllegalArgumentException e) {
+            // assert
+            // Expected
+            verify(da, never()).findByProjectId(test.getId());
+            verify(da, never()).findByProjectName(test.getProjectName());
+            verify(da, never()).findByDeveloperId(test.getDeveloperId());
+            verify(da, never()).update(test);
+            return;
+        }
+        fail();
+    }
+
+    @Test
+    public void testWhenUpdateAndNoDeveloperIdExceptionThrown() {
+// setup
+        Projects test = getTestProject();
+        test.setDeveloperId(null);
+
+        // act
+        try {
+            sb.updateProject(test);
+        } catch (IllegalArgumentException e) {
+            // assert
+            // Expected
+            verify(da, never()).findByProjectId(test.getId());
+            verify(da, never()).findByProjectName(test.getProjectName());
+            verify(da, never()).findByDeveloperId(test.getDeveloperId());
+            verify(da, never()).update(test);
+            return;
+        }
+        fail();
+    }
+
+    @Test
+    public void testWhenUpdateAndNoDescriptionExceptionThrown() {
+        // setup
+        Projects test = getTestProject();
+        test.setDescription(null);
+
+        // act
+        try {
+            sb.updateProject(test);
+        } catch (IllegalArgumentException e) {
+            // assert
+            // Expected
+            verify(da, never()).findByProjectId(test.getId());
+            verify(da, never()).findByProjectName(test.getProjectName());
+            verify(da, never()).findByDeveloperId(test.getDeveloperId());
+            verify(da, never()).update(test);
+            return;
+        }
+        fail();
+    }
+
+    @Test
+    public void testWhenUpdateAndProjectNameDuplicatedExceptionThrown() {
+        // setup
+        Projects test = getTestProject();
+        Projects test2 = getTestProjectTwo();
+        List<Projects> list = new ArrayList<Projects>();
+        list.add(test);
+        List<Projects> list2 = new ArrayList<Projects>();
+        list2.add(test2);
+
+        when(da.findByProjectId(test.getId())).thenReturn(list);
+        when(da.findByProjectName(test.getProjectName())).thenReturn(list2);
+
+        // act
+        try {
+            sb.updateProject(test);
+        } catch (IllegalArgumentException e) {
+            // assert
+            // Expected
+            verify(da).findByProjectId(test.getId());
+            verify(da).findByProjectName(test.getProjectName());
+            verify(da, never()).findByDeveloperId(test.getDeveloperId());
+            verify(da, never()).update(test);
+            return;
+        }
+        fail();
+
+    }
+
+    @Test
+    public void testWhenUpdateAndDeveloperIdDuplicatedExceptionThrown() {
+         // setup
+        Projects test = getTestProject();
+        Projects test2 = getTestProjectTwo();
+        List<Projects> list = new ArrayList<Projects>();
+        list.add(test);
+        List<Projects> list2 = new ArrayList<Projects>();
+        list2.add(test2);
+
+        when(da.findByProjectId(test.getId())).thenReturn(list);
+        when(da.findByProjectName(test.getProjectName())).thenReturn(list);
+        when(da.findByDeveloperId(test.getDeveloperId())).thenReturn(list2);
+        
+        // act
+        try {
+            sb.updateProject(test);
+        } catch (IllegalArgumentException e) {
+            // assert
+            // Expected
+            verify(da).findByProjectId(test.getId());
+            verify(da).findByProjectName(test.getProjectName());
+            verify(da).findByDeveloperId(test.getDeveloperId());
+            verify(da, never()).update(test);
+            return;
+        }
+        fail();
+
+    }
     
+    @Test
+    public void testWhenDeleteAndValidDbCalled() {
+        // setup
+        Projects test = getTestProject();
+        List<Projects> list = new ArrayList<Projects>();
+        list.add(test);
+        
+        when(da.findByProjectName(test.getProjectName())).thenReturn(list);
+        
+        // act
+        sb.deleteProject(test.getProjectName());
+        
+        // assert
+        verify(da).findByProjectName(test.getProjectName());
+        verify(da).remove(test);
+    }
     
-    
+    @Test
+    public void testWhenDeleteAndNotFoundExceptionThrown() {
+        // setup
+        Projects test = getTestProject();
+        
+        when(da.findByProjectName(test.getProjectName()))
+                .thenReturn(new ArrayList<Projects>());
+        
+        // act
+        
+        try {
+            sb.deleteProject(test.getProjectName());
+        } catch (IllegalArgumentException e) {
+            // Assert
+            // Expected
+            verify(da).findByProjectName(test.getProjectName());
+            verify(da, never()).remove(test);
+            return;
+        }
+        fail();
+    }
+
     // Helpers
     private Projects getTestProject() {
         return new Projects(
@@ -237,6 +459,15 @@ public class ServiceBeanTest {
                 "test",
                 "123",
                 "Test desc"
+        );
+    }
+
+    private Projects getTestProjectTwo() {
+        return new Projects(
+                2,
+                "test2",
+                "1234",
+                "Test desc 2"
         );
     }
 }

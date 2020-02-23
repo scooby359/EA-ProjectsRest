@@ -69,8 +69,19 @@ public class ServiceBean {
             throw new IllegalArgumentException(NOT_FOUND);
         }
         
-        // Make sure correct entity DB ID set
-        entity.setId(project.get(0).getId());
+        // Check updated project name is unique
+        // If it exists in DB already, project ID must be the same as this entity
+        List<Projects> projectName = da.findByProjectName(entity.getProjectName());
+        if (!projectName.isEmpty() && (projectName.get(0).getId() != entity.getId())) {
+            throw new IllegalArgumentException("Project name already in use");
+        }
+        
+        // Check lead developer is unique
+        // If developer exists in DB already, project ID must be the same as this entity
+        List<Projects> projectDevId = da.findByDeveloperId(entity.getDeveloperId());
+        if (!projectDevId.isEmpty() && (projectDevId.get(0).getId() != entity.getId())) {
+            throw new IllegalArgumentException("Project name already in use");
+        }
         
         // Merge with DB
         da.update(entity);
