@@ -22,7 +22,7 @@ import models.Projects;
 @SessionScoped
 @ManagedBean(name = "frontEnd")
 public class FrontEnd {
-
+ 
     Projects selected = null;
     List<Projects> projects = null;
     Projects newProject = null;
