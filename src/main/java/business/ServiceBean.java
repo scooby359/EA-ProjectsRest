@@ -51,6 +51,11 @@ public class ServiceBean {
         da.save(entity);
     }
     
+    /**
+     * Updates the given project. Throws IllegalArgumentException if parameters 
+     * missing, or if original item not found in DB
+     * @param entity 
+     */
     public void updateProject(Projects entity) {
         // Check new entity valid, or throw error
         String errors = validateNewProject(entity);
@@ -71,6 +76,11 @@ public class ServiceBean {
         da.update(entity);
     }
     
+    /**
+     * Gets the project for the given name, or returns null
+     * @param name
+     * @return 
+     */
     public Projects getProjectByName(String name) {
         List<Projects> projects = da.findByProjectName(name);
         if (projects.isEmpty()) {
@@ -80,10 +90,18 @@ public class ServiceBean {
         }
     }
     
+    /**
+     * Returns all projects from the DB
+     * @return 
+     */
     public List<Projects> getAllProjects() {
         return da.findAll();
     }
     
+    /**
+     * Deletes the given project from the DB
+     * @param name 
+     */
     public void deleteProject(String name) {
         // Check project exists
         List<Projects> projects = da.findByProjectName(name);
@@ -94,6 +112,12 @@ public class ServiceBean {
         da.remove(projects.get(0));
     }
     
+    /**
+     * Validates that all required fields are in the given project. Returns a 
+     * string with any errors, or a null string if the project is valid
+     * @param entity
+     * @return 
+     */
     private String validateNewProject(Projects entity) {
 
         Boolean isError = false;

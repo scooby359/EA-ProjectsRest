@@ -123,7 +123,7 @@ public class Projects implements Serializable {
 
     @Override
     public String toString() {
-        return "Projects{" + "projectName=" + projectName + ", developerId=" + developerId + ", description=" + description + '}';
+        return "Projects{" + "id=" + id + "projectName=" + projectName + ", developerId=" + developerId + ", description=" + description + '}';
     }
 
     

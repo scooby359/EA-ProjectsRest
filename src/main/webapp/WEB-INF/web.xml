@@ -33,8 +33,21 @@
             <role-name>AdminRole</role-name>
         </auth-constraint>
     </security-constraint>
+    <security-constraint>
+        <display-name>SOAP</display-name>
+        <web-resource-collection>
+            <web-resource-name>Soap</web-resource-name>
+            <description/>
+            <url-pattern>/ProjectsSoap/ProjectsSoap</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <description/>
+            <role-name>AdminRole</role-name>
+        </auth-constraint>
+    </security-constraint>
     <login-config>
         <auth-method>BASIC</auth-method>
+        <realm-name>file</realm-name>
     </login-config>
     <security-role>
         <description/>

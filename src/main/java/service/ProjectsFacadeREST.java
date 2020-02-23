@@ -7,6 +7,7 @@ package service;
 
 import business.ServiceBean;
 import java.util.List;
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
@@ -28,10 +29,8 @@ import models.Projects;
  */
 @Stateless
 @Path("projects")
-// @RolesAllowed({"AdminRole"}) // Restricts all endpoints to AdminRole by default
+@RolesAllowed({"AdminRole"}) // Restricts all endpoints to AdminRole by default
 public class ProjectsFacadeREST  {
-
-    private final int BAD_REQUEST = 400;
     
     @EJB
     private ServiceBean sb;

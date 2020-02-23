@@ -31,7 +31,6 @@ public class FrontEnd {
     ServiceBean sb;
 
     public List<Projects> getItems() {
-        System.out.println("getProjects");
         projects = sb.getAllProjects();
         return projects;
     }
