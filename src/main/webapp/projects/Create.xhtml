@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.CreateProjectsTitle}"></h:outputText>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="#{bundle.CreateProjectsLabel_projectName}" for="projectName" />
+                    <h:inputText id="projectName" value="#{frontEnd.newProject.projectName}" title="#{bundle.CreateProjectsTitle_projectName}" required="true" requiredMessage="#{bundle.CreateProjectsRequiredMessage_projectName}"/>
+                    <h:outputLabel value="#{bundle.CreateProjectsLabel_developerId}" for="developerId" />
+                    <h:inputText id="developerId" value="#{frontEnd.newProject.developerId}" title="#{bundle.CreateProjectsTitle_developerId}" required="true" requiredMessage="#{bundle.CreateProjectsRequiredMessage_developerId}"/>
+                    <h:outputLabel value="#{bundle.CreateProjectsLabel_description}" for="description" />
+                    <h:inputText id="description" value="#{frontEnd.newProject.description}" title="#{bundle.CreateProjectsTitle_description}" required="true" requiredMessage="#{bundle.CreateProjectsRequiredMessage_description}"/>
+                </h:panelGrid>
+                <br />
+                <h:commandLink action="#{frontEnd.create}" value="#{bundle.CreateProjectsSaveLink}" />
+                <br />
+                <br />
+                <h:commandLink action="#{frontEnd.prepareList}" value="#{bundle.CreateProjectsShowAllLink}" immediate="true"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="#{bundle.CreateProjectsIndexLink}"/>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

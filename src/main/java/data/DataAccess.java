@@ -67,6 +67,19 @@ public class DataAccess {
         List<Projects> result = query.getResultList();
         return result;
     }
+    
+    /**
+     * Find all items that match given id
+     *
+     * @param id
+     * @return
+     */
+    public List<Projects> findByProjectId(Integer id) {
+        Query query = em.createNamedQuery("Projects.findById");
+        query.setParameter("id", id);
+        List<Projects> result = query.getResultList();
+        return result;
+    }
 
     /**
      * Update existing item

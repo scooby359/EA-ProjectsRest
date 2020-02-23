@@ -59,7 +59,7 @@ public class ServiceBean {
         }
         
         // Check project exists
-        List<Projects> project = da.findByProjectName(entity.getProjectName());
+        List<Projects> project = da.findByProjectId(entity.getId());
         if (project.isEmpty()) {
             throw new IllegalArgumentException(NOT_FOUND);
         }
