@@ -23,7 +23,7 @@ import models.Projects;
  */
 @WebService(serviceName = "ProjectsSoap")
 
-@RolesAllowed("AdminRole") // - Isn't working - unsure why
+// @RolesAllowed("AdminRole") // - Isn't working - unsure why
 @Stateless()
 public class ProjectsSoap {
 
