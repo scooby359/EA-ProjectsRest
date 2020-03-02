@@ -40,6 +40,10 @@
             <description/>
             <url-pattern>/ProjectsSoap/ProjectsSoap</url-pattern>
         </web-resource-collection>
+        <auth-constraint>
+            <description/>
+            <role-name>AdminRole</role-name>
+        </auth-constraint>
     </security-constraint>
     <login-config>
         <auth-method>BASIC</auth-method>
